@@ -1,17 +1,22 @@
 const express = require('express');
+const axios = require('axios');
 const cors = require('cors');
-const bodyParser = require('body-parser');
-const { analyzeEmotion } = require('./analyzer');
 
 const app = express();
-
-app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
+app.use(cors()); // Enable CORS for all routes
 
 app.post('/analyze', (req, res) => {
     const { sentence } = req.body;
-    const result = analyzeEmotion(sentence);
-    res.json({ result });
+    axios.post('http://127.0.0.1:8080/predict', { sentence })
+        .then((response) => {
+            const modifiedData = response.data.result;
+            res.json({ modifiedData });
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            res.status(500).json({ error: 'Something went wrong' });
+        });
 });
 
 app.listen(3005, () => {
