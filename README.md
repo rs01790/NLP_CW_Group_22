@@ -1,2 +1,2 @@
-# NLP Coursework submission(group 22)
+# NLP Coursework submission
 
